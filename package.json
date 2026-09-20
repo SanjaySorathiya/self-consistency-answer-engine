@@ -1,0 +1,37 @@
+{
+  "name": "self_consistency_answer_engine",
+  "version": "1.0.0",
+  "description": "Production-oriented multi LLM provider GenAI orchestration engine with structured outputs, independent model generation, LLM-as-a-judge synthesis, prompt-injection mitigation, capability-based authorization boundaries, retries, failure isolation and reusable TypeScript core architecture.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/src/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SanjaySorathiya/self-consistency-answer-engine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/SanjaySorathiya/self-consistency-answer-engine/issues"
+  },
+  "homepage": "https://github.com/SanjaySorathiya/self-consistency-answer-engine#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.127.0",
+    "@google/genai": "^2.23.0",
+    "dotenv": "^18.0.1",
+    "openai": "^7.20.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
