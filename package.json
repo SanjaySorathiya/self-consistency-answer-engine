@@ -2,11 +2,11 @@
   "name": "self_consistency_answer_engine",
   "version": "1.0.0",
   "description": "Production-oriented multi LLM provider GenAI orchestration engine with structured outputs, independent model generation, LLM-as-a-judge synthesis, prompt-injection mitigation, capability-based authorization boundaries, retries, failure isolation and reusable TypeScript core architecture.",
-  "main": "index.js",
+  "main": "cli.js",
   "scripts": {
-    "dev": "tsx src/index.ts",
+    "dev": "tsx src/cli.ts",
     "build": "tsc",
-    "start": "node dist/src/index.js",
+    "start": "node dist/src/cli.js",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test"
   },
