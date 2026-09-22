@@ -1,6 +1,6 @@
 import type { CandidateAnswer } from "../schemas/llm.js";
 
-export type ProviderName = "openai";
+export type ProviderName = "openai" | "anthropic" | "gemini";
 
 export interface SolverProvider {
   readonly name: ProviderName;

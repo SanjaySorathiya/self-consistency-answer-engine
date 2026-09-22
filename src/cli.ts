@@ -1,7 +1,6 @@
 import { createInterface } from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-
-import { OpenAIProvider } from "./providers/openai.js";
+import { collectCandidates } from "./core/collect-candidates.js";
 
 const rl = createInterface({
   input,
@@ -10,11 +9,16 @@ const rl = createInterface({
 
 function printHeader(): void {
   console.log();
-  console.log("=".repeat(72));
-  console.log("        SELF-CONSISTENCY ANSWER ENGINE");
-  console.log("        Milestone 2 - OpenAI");
-  console.log("=".repeat(72));
+  console.log("=".repeat(80));
+  console.log("             SELF-CONSISTENCY ANSWER ENGINE");
+  console.log("             Milestone 3 - Multi-Model simple");
+  console.log("=".repeat(80));
   console.log();
+}
+
+function printDivider(): void {
+  console.log();
+  console.log("-".repeat(80));
 }
 
 async function main(): Promise<void> {
@@ -28,28 +32,48 @@ async function main(): Promise<void> {
     throw new Error("Prompt cannot be empty.");
   }
 
-  const provider = new OpenAIProvider();
-
   console.log();
-  console.log(`Calling ${provider.name} (${provider.model})...`);
+  console.log("USER PROMPT");
+  console.log("===========");
+  console.log(normalizedPrompt);
 
-  const result = await provider.generate(normalizedPrompt);
+  printDivider();
 
-  console.log();
-  console.log("MODEL ANSWER");
-  console.log("============");
-  console.log(result.answer);
+  const candidates = await collectCandidates(normalizedPrompt);
 
-  console.log();
-  console.log("KEY POINTS");
-  console.log("==========");
+  printDivider();
 
-  for (const point of result.key_points) {
-    console.log(`- ${point}`);
+  console.log("INDEPENDENT MODEL RESPONSES");
+
+  for (const candidate of candidates) {
+    printDivider();
+
+    console.log(`PROVIDER: ${candidate.provider.toUpperCase()} | MODEL: ${candidate.model}`);
+    console.log();
+
+    console.log("ANSWER");
+    console.log("------");
+    console.log(candidate.answer.answer);
+    console.log();
+
+    console.log("KEY POINTS");
+    console.log("----------");
+
+    for (const point of candidate.answer.key_points) {
+      console.log(`- ${point}`);
+    }
+
+    console.log();
+    console.log(`CONFIDENCE: ${candidate.answer.confidence}`);
   }
 
+  printDivider();
+
+  console.log(`SUCCESSFUL PROVIDERS: ${candidates.length}`);
   console.log();
-  console.log(`Confidence: ${result.confidence}`);
+  console.log("Milestone 3 complete:");
+  console.log("The same prompt was processed by OpenAI, Anthropic.");
+  // console.log("Final synthesis will be added in the next milestone.");
 }
 
 try {
