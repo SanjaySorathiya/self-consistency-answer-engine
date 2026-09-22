@@ -1,0 +1,23 @@
+========================================================================
+        SELF-CONSISTENCY ANSWER ENGINE
+        Milestone 2 - OpenAI
+========================================================================
+
+Enter your question or prompt:
+> summarise Jev in AI domain
+
+Calling openai (gpt-4.1-mini)...
+
+MODEL ANSWER
+============
+JEV, in the AI domain, typically refers to 'Joint Embedding Visualization' or 'Joint Embedding Vector,' techniques used to map data from different modalities (like images and text) into a shared embedding space to enable tasks such as cross-modal retrieval or multimodal learning.
+
+KEY POINTS
+==========
+- JEV stands for Joint Embedding Visualization or Joint Embedding Vector in AI contexts.
+- It involves embedding data from multiple modalities into a common vector space.
+- Facilitates cross-modal tasks like image-text retrieval and multimodal analysis.
+- Helps in visualizing and interpreting the relationships between different data types.
+- Used in AI models to improve understanding and integration of heterogeneous data.
+
+Confidence: medium

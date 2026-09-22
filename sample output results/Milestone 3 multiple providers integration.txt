@@ -1,0 +1,52 @@
+================================================================================
+             SELF-CONSISTENCY ANSWER ENGINE
+             Milestone 3 - Multi-Model simple
+================================================================================
+
+Enter your question or prompt:
+> 2 points summary for AI tool calling
+
+USER PROMPT
+===========
+2 points summary for AI tool calling
+
+--------------------------------------------------------------------------------
+Calling openai (gpt-4.1-mini)...
+Calling anthropic (claude-haiku-4-5)...
+
+--------------------------------------------------------------------------------
+INDEPENDENT MODEL RESPONSES
+
+--------------------------------------------------------------------------------
+PROVIDER: OPENAI | MODEL: gpt-4.1-mini
+
+ANSWER
+------
+AI tool calling refers to the process of integrating and invoking AI-based services or APIs within software applications to perform tasks like data analysis, natural language processing, or automation.
+
+KEY POINTS
+----------
+- Involves integration of AI services or APIs into applications.
+- Enables automation and enhancement of tasks such as data analysis and NLP.
+
+CONFIDENCE: high
+
+--------------------------------------------------------------------------------
+PROVIDER: ANTHROPIC | MODEL: claude-haiku-4-5
+
+ANSWER
+------
+AI tool calling refers to the capability of AI systems to invoke external tools, APIs, or functions to extend their capabilities beyond language generation. This allows AI models to perform actions like retrieving real-time information, performing calculations, accessing databases, or controlling systems. Tool calling is essential for building practical AI applications that need to interact with the real world and integrate with existing software ecosystems.
+
+KEY POINTS
+----------
+- AI tool calling enables AI systems to invoke external APIs, functions, or services to perform tasks beyond text generation, such as retrieving data, performing calculations, or controlling systems
+- Tool calling makes AI more practical and functional by allowing integration with real-world applications and databases, improving accuracy and enabling dynamic responses to user queries
+
+CONFIDENCE: high
+
+--------------------------------------------------------------------------------
+SUCCESSFUL PROVIDERS: 2
+
+Milestone 3 complete:
+The same prompt was processed by OpenAI, Anthropic.
