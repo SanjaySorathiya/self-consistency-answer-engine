@@ -1,90 +1,127 @@
 import { createInterface } from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import { collectCandidates } from "./core/collect-candidates.js";
+import { runAnswerEngine } from "./core/answer-engine.js";
 
 const rl = createInterface({
   input,
   output,
 });
 
-function printHeader(): void {
-  console.log();
-  console.log("=".repeat(80));
-  console.log("             SELF-CONSISTENCY ANSWER ENGINE");
-  console.log("             Milestone 3 - Multi-Model simple");
-  console.log("=".repeat(80));
-  console.log();
+function divider(): void {
+  console.log("\n" + "=".repeat(80));
 }
 
-function printDivider(): void {
-  console.log();
-  console.log("-".repeat(80));
+function printCandidate(candidate: {
+  provider: string;
+  model: string;
+  attempts: number;
+  latencyMs: number;
+  answer: {
+    answer: string;
+    key_points: string[];
+    confidence: "low" | "medium" | "high";
+  };
+}): void {
+  divider();
+
+  console.log(`PROVIDER : ${candidate.provider.toUpperCase()}`);
+  console.log(`MODEL    : ${candidate.model}`);
+  console.log(`LATENCY  : ${candidate.latencyMs} ms`);
+  console.log(`ATTEMPTS : ${candidate.attempts}`);
+  console.log(`CONFIDENCE: ${candidate.answer.confidence}`);
+  console.log("\nANSWER");
+  console.log("------");
+  console.log(candidate.answer.answer);
+  console.log("\nKEY POINTS");
+  console.log("----------");
+
+  for (const point of candidate.answer.key_points) {
+    console.log(`- ${point}`);
+  }
 }
 
 async function main(): Promise<void> {
-  printHeader();
+  divider();
+  console.log("\nSELF-CONSISTENCY ANSWER ENGINE");
+  console.log("Milestone 4 - Multi-model synthesis");
+  divider();
 
   const prompt = await rl.question("Enter your question or prompt:\n> ");
 
-  const normalizedPrompt = prompt.trim();
-
-  if (!normalizedPrompt) {
+  if (!prompt.trim()) {
     throw new Error("Prompt cannot be empty.");
   }
 
-  console.log();
-  console.log("USER PROMPT");
-  console.log("===========");
-  console.log(normalizedPrompt);
-
-  printDivider();
-
-  const candidates = await collectCandidates(normalizedPrompt);
-
-  printDivider();
-
+  console.log("\nRunning independent solvers...");
+  const result = await runAnswerEngine(prompt);
+  divider();
+  console.log("REQUEST");
+  console.log("-------");
+  console.log(result.requestId);
+  console.log("\nPROMPT");
+  console.log("------");
+  console.log(result.prompt);
+  divider();
   console.log("INDEPENDENT MODEL RESPONSES");
 
-  for (const candidate of candidates) {
-    printDivider();
-
-    console.log(`PROVIDER: ${candidate.provider.toUpperCase()} | MODEL: ${candidate.model}`);
-    console.log();
-
-    console.log("ANSWER");
-    console.log("------");
-    console.log(candidate.answer.answer);
-    console.log();
-
-    console.log("KEY POINTS");
-    console.log("----------");
-
-    for (const point of candidate.answer.key_points) {
-      console.log(`- ${point}`);
-    }
-
-    console.log();
-    console.log(`CONFIDENCE: ${candidate.answer.confidence}`);
+  for (const candidate of result.candidates) {
+    printCandidate(candidate);
   }
 
-  printDivider();
+  if (result.failures.length > 0) {
+    divider();
+    console.log("FAILED PROVIDERS");
 
-  console.log(`SUCCESSFUL PROVIDERS: ${candidates.length}`);
-  console.log();
-  console.log("Milestone 3 complete:");
-  console.log("The same prompt was processed by OpenAI, Anthropic.");
-  // console.log("Final synthesis will be added in the next milestone.");
+    for (const failure of result.failures) {
+      console.log(`\n${failure.provider}`);
+      console.log(`Model: ${failure.model}`);
+      console.log(`Attempts: ${failure.attempts}`);
+      console.log(`Error: ${failure.error}`);
+    }
+  }
+
+  divider();
+  console.log("FINAL SYNTHESIZED ANSWER");
+  console.log("\n" + result.final.final_answer);
+
+  divider();
+  console.log("AGREEMENTS");
+
+  for (const item of result.final.agreements) {
+    console.log(`- ${item}`);
+  }
+
+  divider();
+  console.log("DISAGREEMENTS");
+
+  if (result.final.disagreements.length === 0) {
+    console.log("None explicitly identified.");
+  }
+
+  for (const item of result.final.disagreements) {
+    console.log(`- ${item}`);
+  }
+
+  divider();
+  console.log("UNCERTAINTIES");
+
+  if (result.final.uncertainties.length === 0) {
+    console.log("None explicitly identified.");
+  }
+
+  for (const item of result.final.uncertainties) {
+    console.log(`- ${item}`);
+  }
+
+  divider();
+  console.log(`Total solver orchestration time: ${result.totalLatencyMs} ms`);
 }
 
 try {
   await main();
 } catch (error) {
-  console.error();
-  console.error(
-    "Application error:",
-    error instanceof Error ? error.message : String(error),
-  );
-
+  console.error("\nApplication error:");
+  console.error(error instanceof Error ? error.message : String(error));
   process.exitCode = 1;
 } finally {
   rl.close();
